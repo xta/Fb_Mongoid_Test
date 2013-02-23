@@ -1,0 +1,12 @@
+defaults: &defaults
+  fb_app_id: "id_goes_here"
+  fb_app_secret: "secret_goes_here"
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
