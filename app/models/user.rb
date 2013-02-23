@@ -13,6 +13,8 @@ class User
   field :email, type: String
   field :image, type: String
 
+  embeds_many :friends
+
   def self.from_omniauth(auth)
     where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)
   end
@@ -30,7 +32,26 @@ class User
       user.image      = auth.info.image
       user.expires_at = auth.credentials.expires_at
 
+      create_users_friends(user)
+
     end
+  end
+
+  def self.create_users_friends(user)
+    client        = FacebookWrapper.new(user)
+    users_friends = client.friends
+
+    users_friends.each do |friend|
+      begin
+        new_friend      = user.friends.build
+        new_friend.name = friend["name"]
+        new_friend.uid  = friend["id"]
+        new_friend.save
+      rescue Exception => e
+        logger.debug e
+      end
+    end
+
   end
 
 end

@@ -1,0 +1,13 @@
+<% if current_user %>
+
+  <h2>Friends</h2>
+
+  <ul>
+
+    <% @friends.each do |friend| %>
+      <li><%= friend.uid %> <%= friend.name %></li>
+    <% end %>
+
+  </ul>
+
+<% end %>
